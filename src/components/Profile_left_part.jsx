@@ -84,7 +84,7 @@ function Profile_left_part() {
                                     </div>
                                     <div class="  text-[#ebebeb] text-lg font-normal font-['Nirmala UI'] ml-[2vw]">Chats</div>
                                     <div class=" ">
-                                        <div class=" p-2.5  justify-start items-center gap-2.5 inline-flex absolute right-[1vw] top-[0.2vh] ">
+                                        <div class=" p-2.5  justify-start items-center gap-2.5 inline-flex absolute right-[1vw] top-[0.5vh] ">
                                             <div class=" w-[22px] h-[22px] bg-[#fff9f9] rounded-full  flex justify-center items-center">
                                                 <div class=" text-black text-[13px] font-normal font-['Roboto Flex']">4</div>
                                             </div>
