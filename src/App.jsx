@@ -8,7 +8,7 @@ import Login from './components/Login';
 //import RefrshHandler from './RefrshHandler';
 
 import Profile from './pages/Profile';
-
+import New_profile from './pages/New_profile';
 import Termscondition from './pages/Termscondition'
 import Notification from './pages/Notification'
 import Myorders from './pages/myorders';
@@ -33,6 +33,7 @@ function App() {
       <Route path="/notification" element={<Notification />} />
       <Route path="/termscondition" element={<Termscondition />} />
       <Route path="/myorders" element={<Myorders />} />
+      <Route path="/new_profile" element={<New_profile/>}/>
      </Routes>
      </BrowserRouter>
 

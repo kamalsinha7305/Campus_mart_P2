@@ -1,7 +1,7 @@
 import React from "react"
-import Profile_left_part from '../components/Profile_left_part';
+ import Profile_left_part from '../components/Profile_left_part'; 
 import Image1 from '../assets/command.png'
-import Image2 from '../assets/delete.png'
+/* import Image2 from '../assets/delete.png' */
 import Image3 from '../assets/tick.png'
 function Notification(){
 
