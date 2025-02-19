@@ -9,9 +9,9 @@ import Login from './components/Login';
 
 import Profile from './pages/Profile';
 import New_profile from './pages/New_profile';
-import Termscondition from './pages/Termscondition'
-import Notification from './pages/Notification'
-import Myorders from './pages/myorders';
+import Termscondition from './pages/Termscondition';
+import Notification from './pages/Notification';
+import Myorders from './pages/Myorders';
 function App() {
 
  /*  const [isAuthenticated, setIsAuthenticated] = useState(false);
