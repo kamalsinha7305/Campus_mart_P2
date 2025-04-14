@@ -176,7 +176,7 @@ function Login() {
 
               <div>
 
-                <button type='submit' className='text-white text-[16.5px] font-medium font-poppins  bg-[#1a1d20]  rounded-[8px] border border-[#dbdbdb] lg:w-[24.5vw] lg:h-[5.8vh] w-[80vw] h-[5vh] mt-[2vh] mb-[2vh] transition-all duration-300 cursor-pointer hover:bg-[#0b0c0d] hover:scale-105'>Sign in </button>
+                <button type='submit' className='text-white text-[14px] lg:text-[16.5px] font-medium font-poppins  bg-[#1a1d20]  rounded-[8px] border border-[#dbdbdb] lg:w-[24.5vw] lg:h-[5.8vh] w-[80vw] h-[5vh] mt-[2vh] mb-[2vh] transition-all duration-300 cursor-pointer hover:bg-[#0b0c0d] hover:scale-105'>Sign in </button>
 
               </div>
 
