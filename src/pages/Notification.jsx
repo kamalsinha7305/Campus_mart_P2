@@ -9,7 +9,7 @@ function Notification() {
             <div className='flex'>
                 <Profile_left_part />
 
-                <div className=' h-screen w-[73%] flex flex-col '>
+                <div className=' h-screen w-[73%] flex flex-col bg-[#FBFBFB]'>
 
                     <div className="ml-[3vw]">
                         <div className="mt-[5vh] mb-[2vh] ">

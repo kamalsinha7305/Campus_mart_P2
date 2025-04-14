@@ -4,7 +4,7 @@ import Profile_left_part from '../components/Profile_left_part';
 import { Link } from "react-router-dom";
 import Image1 from "../assets/earphone.png"
 import TabSwitcher from "../components/manageorderanime";
-function Myorders() {
+function ProductListed() {
     return (
         <>
             <div className='lg:flex'>
@@ -15,7 +15,7 @@ function Myorders() {
                     <div className=" mx-[4vw] lg:mx-[3vw]">
 
                         <div className="flex justify-between items-center">
-                            <div className=" text-[1.1rem] mb-[2vh] mt-[3vh]  lg:mt-[5vh] lg:mb-[2vh] text-[#292929] lg:text-[22px] lg:font-medium font-['Poppins'] ">My orders</div>
+                            <div className=" text-[1.1rem] mb-[2vh] mt-[3vh]  lg:mt-[5vh] lg:mb-[2vh] text-[#292929] lg:text-[22px] lg:font-medium font-['Poppins'] ">Product Listed</div>
 
 
                             <div class="">
@@ -248,5 +248,5 @@ function Myorders() {
     )
 }
 
-export default Myorders
+export default ProductListed
 
