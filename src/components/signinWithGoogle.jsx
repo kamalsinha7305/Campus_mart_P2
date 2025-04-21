@@ -3,26 +3,45 @@ import { GoogleAuthProvider } from 'firebase/auth'
 import { auth, db } from "./firebase";
 import { toast } from "react-toastify";
 import { signInWithPopup } from "firebase/auth";
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 function SignInwithGoogle() {
 
 
-    function googleLogin() {
+    async function googleLogin() {
+        const navigate = useNavigate(); 
         const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider).then(async (result) => {
-            console.log("User Info:", result.user);
-            toast.success("Signed in successfully");
-        })
-            .catch((error) => {
-                console.error("Error signing in:", error);
-                toast.error("failed to sign in!");
-            });
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
 
+            const userDocRef = doc(db, 'Users', user.uid);
+            const userDoc = await getDoc(userDocRef);
+
+         
+            if (!userDoc.exists()) {
+                await setDoc(userDocRef, {
+                    firstName: user.displayName?.split(" ")[0] || "",
+                    lastName: user.displayName?.split(" ")[1] || "",
+                    email: user.email,
+                    phone: user.phoneNumber || "",
+                    photo: user.photoURL || "",
+                });
+            }
+
+            toast.success("Signed in successfully");
+            navigate('/profile');
+        } catch (error) {
+            console.error("Error signing in:", error);
+            toast.error("Failed to sign in!");
+        }
     }
+
     return (
         <>
             <div className=''>
-                <button onClick={googleLogin} className='text-[#1e1e1e] text-[14px] lg:text-[16px] font-normal font-Poppins mt-[2vh]  mb-[2vh] rounded-[8px] lg:rounded-[10px] border border-black  flex justify-center items-center lg:w-[24.5vw] lg:h-[5.8vh] w-[80vw] h-[5vh] transition-all duration-300 cursor-pointer hover:bg-[#e9ecff]  hover:scale-105'>
-                    <svg className="mr-[0.5vw]" width="23" height="22" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <button onClick={googleLogin} className='text-[#1e1e1e] text-[14px] lg:text-[16px] font-normal font-Poppins mt-[2vh]  mb-[2vh] rounded-[8px] lg:rounded-[10px] border border-black  flex justify-center items-center lg:w-[24.5vw] lg:h-[5.8vh] w-[78vw] h-[5vh] transition-all duration-300 cursor-pointer hover:bg-[#e9ecff]  hover:scale-105'>
+                    <svg className="lg:mr-[0.5vw] mr-[1.5vw]" width="23" height="22" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_1413_81)">
                             <path d="M9.02548 0.819515C6.63092 1.65021 4.56585 3.2269 3.1336 5.31799C1.70136 7.40907 0.977425 9.90434 1.06814 12.4373C1.15886 14.9702 2.05944 17.4073 3.63761 19.3906C5.21578 21.3738 7.38834 22.7988 9.8362 23.456C11.8207 23.9681 13.8999 23.9906 15.8951 23.5216C17.7025 23.1156 19.3734 22.2472 20.7444 21.0014C22.1713 19.6652 23.207 17.9654 23.7401 16.0846C24.3197 14.0394 24.4228 11.8886 24.0416 9.79735H12.8975V14.4201H19.3514C19.2224 15.1574 18.946 15.8611 18.5387 16.4891C18.1314 17.1171 17.6016 17.6565 16.981 18.0749C16.1929 18.5962 15.3045 18.947 14.3729 19.1047C13.4385 19.2785 12.48 19.2785 11.5456 19.1047C10.5986 18.9089 9.7027 18.518 8.91501 17.957C7.64959 17.0612 6.69943 15.7887 6.20013 14.3209C5.69238 12.8257 5.69238 11.2046 6.20013 9.70935C6.55554 8.66125 7.1431 7.70696 7.91893 6.9177C8.80677 5.99791 9.93081 5.34044 11.1677 5.01743C12.4046 4.69441 13.7066 4.71833 14.9308 5.08656C15.8871 5.38013 16.7617 5.89305 17.4847 6.58443C18.2124 5.86046 18.9389 5.13462 19.6641 4.4069C20.0385 4.01559 20.4467 3.64299 20.8156 3.24231C19.7119 2.21529 18.4165 1.41615 17.0035 0.890663C14.4303 -0.0436497 11.6149 -0.0687585 9.02548 0.819515Z" fill="white" />
                             <path d="M9.02498 0.81957C11.6142 -0.0693068 14.4296 -0.044859 17.003 0.888846C18.4162 1.4179 19.7111 2.2209 20.8132 3.25173C20.4387 3.65241 20.0437 4.02688 19.6617 4.41632C18.9352 5.14154 18.2094 5.86426 17.4842 6.58448C16.7612 5.8931 15.8866 5.38018 14.9303 5.08662C13.7065 4.71709 12.4046 4.69179 11.1673 5.01349C9.9301 5.33518 8.80537 5.99144 7.91655 6.91027C7.14072 7.69952 6.55317 8.65382 6.19775 9.70192L2.31641 6.69682C3.70569 3.9418 6.11116 1.83442 9.02498 0.81957Z" fill="#E33629" />

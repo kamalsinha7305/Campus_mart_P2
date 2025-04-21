@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { useState } from 'react';
 import { auth } from "./firebase";
 import { Eye, EyeOff } from "lucide-react";
+import Image9 from '../assets/circle_up.png';
 
 function Login() {
 
@@ -132,11 +133,11 @@ function Login() {
           <path d="M19.1842 9.63082C19.1842 12.1811 16.6971 14.2485 14.1468 14.2485C11.5965 14.2485 9.10938 12.1811 9.10938 9.63082C9.10938 7.08056 15.0807 1.23511 17.6309 1.23511C20.1812 1.23511 19.1842 7.08056 19.1842 9.63082Z" stroke="#534FF2" stroke-width="1.67914" />
           <path d="M4.12511 10.2522C4.41527 9.14425 5.41637 8.37158 6.56164 8.37158H19.7557C20.8938 8.37158 21.8905 9.13479 22.1872 10.2335L25.5888 22.8271C26.0212 24.4279 24.8154 26.0026 23.1572 26.0026H3.26333C1.6131 26.0026 0.408693 24.4421 0.826795 22.8457L4.12511 10.2522Z" fill="#394FF1" />
         </svg>
-          <span className='text-[#012436] lg:text-[1.5rem] font-poppins font-semibold ml-[0.3vw] ' >Campus Mart</span>
+          <span className='text-[#012436] text-[18px] lg:text-[1.5rem] font-poppins font-semibold ml-[0.3vw] ' >Campus Mart</span>
         </div>
         <div className=''>
 
-          <h1 className=' flex items-center justify-center mt-[4vh]'> <span className='font-robotoflex text-black font-semibold lg:text-[1.65rem] mr-[6px]'>Welcome to </span> <span className='font-robotoflex font-semibold text-[#005df5] lg:text-[1.65rem]'> Campus Mart</span></h1>
+          <h1 className=' flex items-center justify-center mt-[3vh] lg:mt-[4vh]'> <span className='  font-robotoflex text-black text-[18px] font-semibold lg:text-[1.65rem] mr-[6px]'>Welcome to </span> <span className='font-robotoflex font-semibold text-[#005df5] lg:text-[1.65rem] text-[18px]'> Campus Mart</span></h1>
 
           <div class="flex items-center justify-center text-[#828f9b] text-[13px] lg:text-[1.025rem] font-normal font-['Poppins'] mb-[3vh]">Enter your details to access Campus Mart.</div>
           <div className='w-3/4  mx-auto'  >
@@ -144,8 +145,8 @@ function Login() {
 
               <div className='mt-[3vh]'>
                 <label htmlFor="email"></label>
-                <div className="text-[#1e1e1e] lg:text-[16px] font-normal font-['Poppins'] mb-[0.5vh]">Email</div>
-                <input className='lg:w-[24.5vw] lg:h-[5.8vh] rounded-[5px] font-semibold border border-[#bbc2c9]  pl-[1.3vw] text-[13px] mb-[1.4vh]'
+                <div className="text-[#1e1e1e] text-[13.5px] lg:text-[16px] font-normal font-['Poppins'] lg:mb-[0.5vh]">Email</div>
+                <input className='w-[77vw] h-[5.2vh] rounded-[3px] lg:w-[24.5vw] lg:h-[5.8vh] lg:rounded-[5px] font-normal lg:font-semibold border border-[#bbc2c9] pl-[4vw]  lg:pl-[1.3vw] text-[12.5px] mb-[1.4vh]'
                   type='email'
                   name='form-control'
                   value={email}
@@ -155,10 +156,10 @@ function Login() {
               </div>
 
               <div className='relative'>
-                <div className="text-[#1e1e1e] text-[16px] font-normal font-['Poppins'] mb-[0.5vh] ">Password</div>
+                <div className="text-[#1e1e1e] text-[13.5px] lg:text-[16px] font-normal font-['Poppins'] mb-[0.5vh] ">Password</div>
                 <label htmlFor="passsword"></label>
 
-                <input className='lg:w-[24.5vw] lg:h-[5.8vh]  rounded-[5px] font-semibold border border-[#bbc2c9]  pl-[1.3vw] text-[13px] mb-[1.2vh]'
+                <input className='w-[77vw] h-[5vh] lg:w-[24.5vw] lg:h-[5.8vh] rounded-[3px] lg:rounded-[5px] font-normal lg:font-semibold border border-[#bbc2c9] pl-[4vw] lg:pl-[1.3vw] text-[12.5px] mb-[1.2vh]'
                   type={showPassword ? 'text' : 'password'}
                   name='password'
                   value={password}
@@ -167,8 +168,8 @@ function Login() {
                 > </input>
 
                 <div className='flex justify-between items-center mt-[1vh]'>
-                  <div className=" text-[#848484]  text-sm font-normal font-['Poppins']"> <input className="mr-[0.3vw]" type="checkbox" name="" id="" />Remember me </div>
-                  <div className="text-[#2d3339] text-sm font-normal font-['Poppins']">Forgot Password</div>
+                  <div className=" text-[#848484] text-[12px] lg:text-sm lg:font-normal font-['Poppins']"> <input className="mr-[0.3vw]" type="checkbox" name="" id="" />Remember me </div>
+                  <div className="text-[#2d3339] text-[12px] lg:text-sm font-normal font-['Poppins']">Forgot Password</div>
                 </div>
 
                 <button type='button' className="absolute inset-y-0 right-3 flex items-center" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff size={20} /> : <Eye size={20} />}</button>
@@ -182,21 +183,26 @@ function Login() {
 
               <div class=" justify-center items-center  inline-flex">
                 <div class="w-[7vw] h-[0px] border border-[#d6d6d6]"></div>
-                <div class="text-[#64707d] text-[14px] font-normal font-['Poppins']">or continue with</div>
+                <div class="text-[#64707d] text-[13px] lg:text-[14px] font-normal font-['Poppins']">or continue with</div>
                 <div class="w-[7vw] h-[0px] border border-[#d6d6d6]"></div>
               </div>
 
               <SignInwithGoogle />
 
-              <div><span className='text-[#848484] text-[15px] font-normal font-poppins'>Don't have a account ? </span><Link to={"/signup"}><span className=' text-[#292929] lg:text-[15.5px] font-normal font-poppins'> Sign up {'>'} </span></Link></div>
+              <div><span className='text-[#848484] text-[13px] lg:text-[15px] font-normal font-poppins'>Don't have a account ? </span><Link to={"/signup"}><span className=' text-[#292929] text-[13px] lg:text-[15.5px] font-normal font-poppins'> Sign up {'>'} </span></Link></div>
 
             </form>
           </div>
         </div>
+        <div className='lg:hidden'>
+          <img src={Image9} alt="" srcset="" />
+        </div>
 
-        <div className='flex flex-col justify-center items-center w-full  absolute bottom-[5.5vh] md-[5px]'>
-          <div className='w-[85%] h-[0px] bg-[#aab9c5] border border-[#92a5b5]'></div>
-          <div className=''><span className='text-[#aab9c5]  text-base font-normal font-Poppins w-full absolute left-[3.5vw]'>@2025 Copyright Reserved</span> <span className='text-[#aab9c5] text-base font-normal font-Poppins absolute right-[3.5vw] '>Login issues? Contact us.</span></div>
+        <div className='flex flex-col justify-center items-center w-full  absolute bottom-[3.4vh] md-[5px]'>
+          
+        <div className='flex flex-col justify-center items-center w-full  absolute bottom-[-0.9vh] lg:bottom-[-0.5vh] '>
+          <div class="text-center"><span class="text-zinc-500  text-[11px] lg:text-[12.5px] font-normal font-['Poppins']">By clicking "Create account" I acknowledge that <br />I agree to the </span><span class="text-[#848484]  text-[11px] lg:text-[13px] font-normal font-['Poppins'] underline">Terms of Use</span><span class="text-zinc-500  text-[11px] lg:text-[13px] font-normal font-['Poppins']"> and </span><span class="text-zinc-500  text-[11px] lg:text-sm font-normal font-['Poppins'] underline">Privacy Policy</span><span class="text-zinc-500  text-[11px] lg:text-sm font-normal font-['Poppins']">.</span></div>
+        </div>
         </div>
 
 

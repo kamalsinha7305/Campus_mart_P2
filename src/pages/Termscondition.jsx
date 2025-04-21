@@ -1,9 +1,11 @@
 import Profile_left_part from "../components/Profile_left_part"
 import React from 'react'
+import Header from "../components/Header"
 function Termscondition(){
 
     return(
         <>
+        <Header/>
         <div className="flex">
             <Profile_left_part/>
             <div className=" xl:w-[75%] h-screen relative bg-[#FBFBFB] overflow-y-auto">

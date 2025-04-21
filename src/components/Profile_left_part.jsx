@@ -35,7 +35,7 @@ function Profile_left_part() {
 
     return (
         <>
-            <div className='hidden md:block h-screen w-[25%] relative bg-[#FBFBFB]'>
+            <div className='hidden  md:block h-screen md:w-[35%] lg:w-[25%] relative bg-[#FBFBFB]'>
                 <div class=" bg-white rounded-2xl shadow-[2px_4px_12px_0px_rgba(0,0,0,0.10)] ml-[1.5vw] mr-[1vw] mt-[25px] mb-[1vh] h-[92.5vh]  ">
                     <div className=" mr-[1.2vw] pl-[1vw] pt-[2.5vh] ">
                        
@@ -48,8 +48,8 @@ function Profile_left_part() {
                                     <img class=" rounded-[30.49px] w-[40px] h-[40spx] mr-[1vw]" src={Image1} />
 
                                     <div className="flex flex-col ">
-                                        <div class="w-[177px]   text-black text-[16px] font-normal font-['Poppins']">Abhishek Sharma</div>
-                                        <div class="w-[353px]  text-[#979797] text-[12px] font-normal font-['Poppins']">abhinav.sharma2022@vitstudet.ac.in</div>
+                                        <div class="w-[177px] text-black md:text-[14px] lg:text-[16px] font-normal font-['Poppins']">Abhishek Sharma</div>
+                                        <div class="w-[353px] text-[#979797] md:text-[9px] lg:text-[10px] font-normal font-['Poppins']">abhinav.sharma2022@vitstudet.ac.in</div>
                                     </div>
 
                                     <div data-svg-wrapper class=" absolute right-[1vw] top-[1vh] ">
@@ -66,9 +66,9 @@ function Profile_left_part() {
 
 
 
-                        <div class="  text-black text-[17px] font-medium font-['Poppins'] uppercase mt-[2vh] mb-[1vh]">Manage Orders</div>
+                        <div class="  text-black md:text-[0.9rem] lg:text-[17px] font-medium font-['Poppins'] uppercase mt-[2vh] mb-[1vh]">Manage Orders</div>
                         <Link to='/myorders'>
-                        <div class=" ">
+                        <div class=" "> 
                             <div class="   bg-[#e9ecff] rounded-[10px] border border-[#e5e4ff]  w-full">
                                 <div class="flex  justify-normal items-center  py-[1.5vh] px-[0.5vw]">
 
@@ -78,7 +78,7 @@ function Profile_left_part() {
                                         </svg>
                                     </div>
 
-                                    <div class="  text-[#292929] text-[17px] font-normal font-['Nirmala UI'] ml-[2vw]">Orders</div>
+                                    <div class="  text-[#292929] md:text-[0.93rem] lg:text-[17px] font-normal font-['Nirmala UI'] ml-[2vw]">Orders</div>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +93,7 @@ function Profile_left_part() {
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M12.834 0.124268L24.709 6.98029V20.6924L12.834 27.5484L0.958984 20.6924V6.98029L12.834 0.124268ZM8.87559 12.9219L8.87565 22.216L11.5146 23.7397V14.4455L8.87559 12.9219ZM3.59789 9.87494V19.1688L6.23674 20.6924V11.3985L3.59789 9.87494ZM18.0287 6.17056L10.2619 10.6754L12.834 12.1604L20.6187 7.66588L18.0287 6.17056ZM12.834 3.17138L5.04924 7.66594L7.62599 9.15353L15.3929 4.64877L12.834 3.17138Z" fill="#313131" />
                                     </svg>
                                 </div>
-                                <div class=" text-[#292929] text-[17px] font-normal font-['Nirmala UI']  ml-[2vw]">Product Listed</div>
+                                <div class=" text-[#292929] md:text-[0.93rem] lg:text-[17px] font-normal font-['Nirmala UI']  ml-[2vw]">Product Listed</div>
                             </div>
                         </div>
                         </Link>
@@ -106,7 +106,7 @@ function Profile_left_part() {
                             >            <div data-svg-wrapper class="">
                                         <MessageSquare size={22} ccolor={activeItem === 0 ? "white" : "black"} />
                                     </div>
-                                    <div class="text-[17px] font-normal font-['Nirmala UI'] ml-[2vw] ">Chats</div>
+                                    <div class="md:text-[0.93rem] lg:text-[17px] font-normal font-['Nirmala UI'] ml-[2vw] ">Chats</div>
                                     <div class=" ">
                                         <div className=" p-2.5  justify-start items-center gap-2.5 inline-flex absolute right-[1vw] top-[0.5vh] ">
                                             <div className={` w-[22px] h-[22px]   ${activeItem===0? "bg-white":"bg-[#f10000]"} rounded-full  flex justify-center items-center`}>
@@ -131,7 +131,7 @@ function Profile_left_part() {
                                 <div data-svg-wrapper class=" ">
                                     <Bell size={22} color={activeItem === 1 ? "white" : "black"} />
                                 </div>
-                                <div className="text-[17px] font-normal font-['Nirmala UI']  ml-[2vw]">Notifications</div>
+                                <div className="md:text-[0.93rem] lg:text-[17px] font-normal font-['Nirmala UI']  ml-[2vw]">Notifications</div>
                                 <div className=" ">
                                     <div className="h-[42px] p-2.5  justify-start items-center gap-2.5 inline-flex absolute right-[1vw] top-[0.2vh]">
                                         <div className={`w-[22px] h-[22px]  ${activeItem===1? "bg-white":"bg-[#f10000]"} rounded-full flex justify-center items-center`}>
@@ -152,7 +152,7 @@ function Profile_left_part() {
                                 <div data-svg-wrapper class=" ">
                                     <Heart size={22} color={activeItem === 2 ? "white" : "black"}/>
                                 </div>
-                                <div class="  text-[17px] font-normal font-['Nirmala UI']  ml-[2vw]">Wishlist</div>
+                                <div class=" md:text-[0.93rem] lg:text-[17px] font-normal font-['Nirmala UI']  ml-[2vw]">Wishlist</div>
                             </div>
                         </div>
                         <div class=" pb-[0.3vh]">
@@ -162,7 +162,7 @@ function Profile_left_part() {
                                 <div data-svg-wrapper class=" ">
                                     <Mail size={22} color={activeItem === 3 ? "white" : "black"} />
                                 </div>
-                                <div class="   text-[17px] font-normal font-['Nirmala UI']  ml-[2vw]">Contact Us</div>
+                                <div class=" md:text-[0.93rem]  lg:text-[17px] font-normal font-['Nirmala UI']  ml-[2vw]">Contact Us</div>
                             </div>
                         </div>
                         <Link to='/termscondition'>
@@ -173,7 +173,7 @@ function Profile_left_part() {
                                 <div data-svg-wrapper class=" ">
                                     <Mail size={22} color={activeItem === 4 ? "white" : "black"} />
                                 </div>
-                                <div class="   text-[17px] font-normal font-['Nirmala UI']  ml-[2vw]">Terms and Condition</div>
+                                <div class="  md:text-[0.93rem] lg:text-[17px] font-normal font-['Nirmala UI']  ml-[2vw]">Terms and Condition</div>
                             </div>
                         </div>
                         </Link>
@@ -187,7 +187,7 @@ function Profile_left_part() {
                                         <path d="M4.42222 8.64887C4.66816 7.70981 5.51669 7.0549 6.48742 7.0549H17.6707C18.6353 7.0549 19.4801 7.7018 19.7317 8.63308L22.6148 19.3074C22.9813 20.6642 21.9593 21.9989 20.5538 21.9989H3.69177C2.29304 21.9989 1.27219 20.6763 1.62657 19.3232L4.42222 8.64887Z" fill="#012436" />
                                     </svg>
                                 </div>
-                                <span className='text-[#012436] text-[20px] font-poppins font-semibold mr-[5px]' >Campus</span> <span className=' text-[#009ef3] text-[22px] font-poppins font-semibold'>Mart</span>
+                                <span className='text-[#012436] md:text-[16px] lg:text-[20px] font-poppins font-semibold mr-[5px]' >Campus</span> <span className=' text-[#009ef3]  md:text-[18px] lg:text-[22px] font-poppins font-semibold'>Mart</span>
 
                             </div>
                         </div>

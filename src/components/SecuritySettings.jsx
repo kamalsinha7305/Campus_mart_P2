@@ -4,8 +4,50 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
 import EditButton from "./editbutton";
 import "./deletestyle.css";
-
+import { auth } from "../components/firebase"; 
+import {reauthenticateWithCredential,EmailAuthProvider,updatePassword,}from "firebase/auth";
+import {toast} from "react-toastify";
 export default function SecuritySettings() {
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const handleChangePassword = async () => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      setMessage("Please fill in all fields.");
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setMessage("New passwords do not match.");
+      toast.error("New passwords do not match.")
+      return;
+    }
+
+    const user = auth.currentUser;
+    const credential = EmailAuthProvider.credential(
+      user.email,
+      oldPassword
+    );
+
+    try {
+
+      await reauthenticateWithCredential(user, credential);
+
+      await updatePassword(user, newPassword);
+
+      setMessage("Password updated successfully.");
+      toast.success("password updated successfuly.");
+      
+
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+
+
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -46,7 +88,7 @@ export default function SecuritySettings() {
         </div>
       </div>
 
-      {/* Edit Button with Dialog */}
+   
       <Dialog.Root 
         onOpenChange={(open) => setIsEditing(open)} // Update state when modal opens/closes
       >
@@ -59,46 +101,58 @@ export default function SecuritySettings() {
         {/* Modal Popup */}
         <Dialog.Portal>
           <Dialog.Overlay className="DialogOverlay fixed inset-0 " />
-          <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-xl shadow-lg w-[400px]">
-            <Dialog.Title className="text-lg font-semibold">
+          <Dialog.Content className="fixed top-[40%] lg:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white  px-6 py-3 lg:p-6 rounded-xl shadow-lg lg:w-[400px] w-[85vw]">
+            <Dialog.Title className="text-[15px]  lg:text-lg font-semibold">
               Change Password
             </Dialog.Title>
-            <Dialog.Description className="text-sm text-gray-500">
+            <Dialog.Description className="text-[11px] lg:text-sm text-gray-500">
               Enter your old password and set a new one.
             </Dialog.Description>
 
-            <form className="mt-4 space-y-3">
+            <form className="mt-2 lg:mt-4 space-y-3">
               <div>
-                <label className="text-sm font-medium">Old Password</label>
+                <label className="text-[12px] font-normal lg:text-sm lg:font-medium">Old Password</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md mt-1"
+                  className="w-full max-sm:py-[0.4vh] lg:p-2 border rounded-md lg:mt-1"
+                  value={oldPassword}
+                  onChange={(e)=> setOldPassword(e.target.value)}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">New Password</label>
+                <label className="text-[12px]  font-normal lg:text-sm lg:font-medium">New Password</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-md mt-1"
+                  className="w-full  max-sm:py-[0.4vh] lg:p-2 border rounded-md lg:mt-1"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">Confirm Password</label>
+                <label className=" text-[12px]  lg:text-sm lg:font-medium">Confirm Password</label>
                 <input
                   type="password"
-                  className="w-full p-2 border rounded-sm mt-1"
+                  className="w-full max-sm:py-[0.4vh] lg:p-2 border rounded-sm lg:mt-1"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
-
-              <div className="flex justify-end gap-2 mt-4">
+               <div>
+                
+               {message && (
+                <p className="text-sm text-red-500 mt-3">{message}</p>
+                 )}
+               </div>
+              <div className="flex justify-end gap-4 lg:gap-4 mt-4">
                 <Dialog.Close asChild>
-                  <button className="Button mauve">
+                  <button className=" bg-gray-500 text-white px-[2.8vw] lg:px-[1.5vw] text-[14px]  rounded-md py-[0.6vh] lg:text-[16px] font-normal lg:font-medium ">
                     Cancel
                   </button>
                 </Dialog.Close>
                 <button
-                  type="submit"
-                  className="px-4 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  type="button"
+                  className="lg:px-5 lg:py-1  px-[4vw]  text-[14px] lg:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  onClick={handleChangePassword}
                 >
                   Save
                 </button>
