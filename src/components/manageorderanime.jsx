@@ -9,7 +9,7 @@ export default function TabSwitcher() {
   const [activeTab, setActiveTab] = useState("All");
 
   return (
-    <div className="hidden lg:flex items-center space-x-1 bg-white rounded-[9.61px] shadow-[0px_3.2039802074432373px_6.407960414886475px_0px_rgba(0,0,0,0.06)] px-[0.5vw] py-[0.6vh]">
+    <div className="hidden lg:flex items-center space-x-1 bg-white dark:bg-[#1A1D20] rounded-[9.61px] shadow-[0px_3.2039802074432373px_6.407960414886475px_0px_rgba(0,0,0,0.06)] px-[0.5vw] py-[0.6vh]">
       {tabs.map((tab) => (
         <button
           key={tab}
@@ -23,7 +23,7 @@ export default function TabSwitcher() {
               transition={{ type: "spring", stiffness: 300, damping: 35 }}
             />
           )}
-          <span className={`relative z-10 ${activeTab === tab ? "text-white text-[0.85rem] font-light font-['Poppins']" : "text-[#292929] text-[0.85rem] font-light font-['Poppins']"}`}>
+          <span className={`relative z-10 ${activeTab === tab ? "text-white  text-[0.85rem] font-light font-['Poppins']" : "text-[#292929] dark:text-[#D6D6D6] text-[0.85rem] font-light font-['Poppins']"}`}>
             {tab}
           </span>
         </button>

@@ -60,6 +60,7 @@
 	font-weight: 400;
 	height: 35px;
 	user-select: none;
+	
    
 }
 .Button:focus:not(:focus-visible) {

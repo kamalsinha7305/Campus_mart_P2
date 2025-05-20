@@ -8,10 +8,10 @@ import Login from './components/Login';
 //import RefrshHandler from './RefrshHandler';
 import "react-toastify/dist/ReactToastify.css";
 import Profile from './pages/Profile';
-import New_profile from './pages/New_profile';
 import Termscondition from './pages/Termscondition';
 import Notification from './pages/Notification';
 import Myorders from './pages/Myorders';
+import Wishlist from './pages/Wishlist'
 import { useEffect } from "react";
 import { auth } from "./components/firebase";
 import { ToastContainer } from "react-toastify";
@@ -59,7 +59,7 @@ function App() {
                 <Route path="/notification" element={<Notification />} />
                 <Route path="/termscondition" element={<Termscondition />} />
                 <Route path="/myorders" element={<Myorders />} />
-                <Route path="/new_profile" element={<New_profile />} />
+                <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/productlisted" element={<ProductListed/>}/>
 
               </Routes>

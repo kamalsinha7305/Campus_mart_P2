@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ["./index.html",
     "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -15,6 +16,18 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    ({ addUtilities }) =>
+      addUtilities({
+        ".no-scrollbar": {
+          /* Firefox */
+          "scrollbar-width": "none",
+          /* IE/Edge Legacy */
+          "-ms-overflow-style": "none",
+          /* WebKit */
+          "&::-webkit-scrollbar": { display: "none" },
+        },
+      }),
+  ],
 }
 
