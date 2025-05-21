@@ -27,6 +27,7 @@ export default function Notification() {
 
   return (
     <>
+       <div className='h-screen w-screen dark:bg-[#131313]  '>
       <Header color={"#394ff1"} textColor={"white"} bagUrl={whitebag} />
       <div className="md:flex lg:flex">
      
@@ -126,6 +127,7 @@ export default function Notification() {
 
           </div>
         </div>
+      </div>
       </div>
     </>
   );
