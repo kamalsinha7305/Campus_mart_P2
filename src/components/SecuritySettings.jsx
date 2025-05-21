@@ -93,7 +93,7 @@ export default function SecuritySettings() {
         onOpenChange={(open) => setIsEditing(open)} // Update state when modal opens/closes
       >
         <Dialog.Trigger asChild >
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-4 right-2 md:top-4 md:right-4  ">
       <EditButton isEditing={isEditing} />
     </div>
         </Dialog.Trigger>

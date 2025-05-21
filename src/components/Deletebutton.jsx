@@ -49,8 +49,8 @@ return(
 		</AlertDialog.Trigger>
 		<AlertDialog.Portal>
 			<AlertDialog.Overlay className="AlertDialogOverlay" />
-			<AlertDialog.Content className="AlertDialogContent">
-				<AlertDialog.Title className="AlertDialogTitle">
+			<AlertDialog.Content className="AlertDialogContent ">
+				<AlertDialog.Title className="AlertDialogTitle ">
 					Are you absolutely sure?
 				</AlertDialog.Title>
 				<AlertDialog.Description className="AlertDialogDescription">

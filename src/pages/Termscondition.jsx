@@ -1,26 +1,27 @@
 import Profile_left_part from "../components/Profile_left_part"
 import React from 'react'
-import Header from "../components/Header"
+import Header from "../components/Header";
+import whitebag from "../assets/whitebag.png";
 function Termscondition(){  
     return(
         <>
         <div className="w-full flex flex-col overflow-hidden  min-h-screen dark:bg-[#131313]">
-         <Header color={"#394ff1"} textColor={"white"} />
+         <Header color={"#394ff1"} textColor={"white"} bagUrl={whitebag}/>
         <div className='lg:flex md:flex'>
-                <div className="hidden md:block md:w-[35%] lg:w-[28%] pt-[3.5vh] px-[2vw] pb-[2vh]  bg-[#FBFBFB]  dark:bg-[#131313]">
+                <div className="hidden md:block md:w-[35%] lg:w-[28%] pt-[3.5vh] pl-[2vw] pr-[1.75vw] pb-[2vh]  bg-[#FBFBFB]  dark:bg-[#131313]">
                     <Profile_left_part />
                 </div>               
             <div className="md:w-[65%]  lg:w-[72%] h-screen relative bg-[#FBFBFB] dark:bg-[#131313]  overflow-y-scroll no-scrollbar">
  
-                   <div className=" lg:mr-[3.6vw] lg:ml-[1.5vw] md:mt-[4vh] mx-[5.5vw]">
+                   <div className=" lg:mr-[3.6vw] lg:ml-[1.8vw] md:mt-[4vh] mx-[5.5vw] md:mr-[3vw] md:ml-[2vw] ">
                 <div className=" mt-[4vh] ">
                     <div  className="  text-black dark:text-white  text-[15px] font-semibold xl:text-xl xl:font-medium font-['Poppins'] xl:mb-[0.9vh] "> Terms and Condition</div>
                     <div className="text-[#64707d] mb-[2vh] text-[12px] xl:text-sm xl:font-light font-['Poppins'] xl:mb-[1.3vh] "> Last updated March 15,2025</div>
                     <button className=" px-[4vw] py-[0.5vh] font-medium  top-[5.2vh] right-[5vw] text-[10px]  bg-[#e5e8ff] dark:bg-[#1A1D20] text-black dark:text-white   font-['Poppins']  absolute xl:top-[3vh] xl:right-[3.5vw] rounded-[5px] xl:px-[1.8vw] xl:py-[0.8vh] xl:text-sm ">Must Read</button>
-                    <div class="text-black dark:text-white  text-[11px] font-light xl:text-[13px] xl:font-light font-['Poppins'] xl:mb-[2vh] italic">Welcome to Campus Mart! By using our platform, you agree to the following terms and conditions. <br/>Please read them carefully before proceeding.</div>
+                    <div className="text-black dark:text-white  text-[11px] font-light xl:text-[13px] xl:font-light font-['Poppins'] xl:mb-[2vh] italic">Welcome to Campus Mart! By using our platform, you agree to the following terms and conditions. <br/>Please read them carefully before proceeding.</div>
                 </div>
-                <div class="w-full h-[0px]  mt-[2.5vh]  border border-[#bbc2c9] "></div>
-                <div className="bg-[#FFFFFF] dark:bg-zinc-900 rounded-[10px] xl:rounded-[20px] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.10)]  mt-[2.2vh] mb-[2.6vh] pb-[0.4vh] pr-[4vw] pl-[3vw] pt-[2vh] lg:mx-0 lg:mt-[2.5vh] lg:mb-[3.7vh] lg:pl-[1.8vw] xl:pr-[3vw] lg:pt-[5.5vh] lg::pb-[3vh] "  >
+                <div className="w-full h-[0px]  mt-[2.5vh]  border border-[#bbc2c9] "></div>
+                <div className="bg-[#FFFFFF] dark:bg-zinc-900 rounded-[10px] xl:rounded-[20px] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.10)]  mt-[2.2vh] mb-[2.6vh] pb-[0.4vh] pr-[4vw] pl-[3vw] pt-[2vh] lg:mx-0 lg:mt-[2.5vh] lg:mb-[3.7vh] lg:pl-[1.8vw] xl:pr-[3vw] lg:pt-[5.5vh] lg:pb-[1vh] "  >
                     <div className="">
                         <div className="text-black dark:text-white  mb-[1.6vh] text-[12px] xl:text-[19px] xl:font-medium font-['Poppins'] xl:mb-[2.5vh]"> <span className="bg-[#e5e8ff] dark:bg-[#131313] mr-[2.6vw] px-[1.6vw] py-[0vh] rounded-[3px]  xl:rounded-[8px] xl:h-[4] xl:mr-[0.7vw] xl:px-[0.54vw] xl:py-[0.4vh] ">1</span>Fair Platform Use
                             <div className="text-[#717171]  dark:text-[#D7D7D7]  text-justify ml-[7vw] text-[9px] xl:text-[15px] font-normal font-['Poppins'] xl:ml-[3.4vw] xl:mt-[1.5vh] ">
@@ -157,9 +158,9 @@ function Termscondition(){
                             </div>
                         </div>
                     </div>                       
-                     <div class="w-full h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-300 dark:outline-zinc-300 md:mt-[3vh] md:mb-[4vh] lg:mt-[4vh] lg:mb-[7vh] "></div>
+                     <div className="w-full h-0 outline outline-1 outline-offset-[-0.50px] outline-neutral-300 dark:outline-zinc-300 md:mt-[3vh] md:mb-[4vh] lg:mt-[4vh] lg:mb-[7vh] "></div>
 
-                     <div class="justify-start mb-[2vh] "><span class="text-[#000000] dark:text-zinc-100 text-[12px] lg:text-[15px] md:text-xs md:font-normal font-medium font-['Poppins'] lg:font-medium">By using Campus Mart, you acknowledge and agree to these terms. If you have any questions or concerns, please contact our <br/>support team at </span><span class="text-indigo-500 lg:text-[15px] text-[12px]  md:text-xs md:font-normal font-medium font-['Poppins']">campus.mart@gmail.com</span><span class="text-[#000000] dark:text-zinc-100 lg:text-[15px] md:text-xs md:font-normal lg:font-medium font-['Poppins'] text-[12px]">.<br/><br/>Thank you for being part of the Campus Mart community!</span></div>
+                     <div className="justify-start mb-[2vh] "><span className="text-[#000000] dark:text-zinc-100 text-[12px] lg:text-[15px] md:text-xs md:font-normal font-medium font-['Poppins'] lg:font-medium">By using Campus Mart, you acknowledge and agree to these terms. If you have any questions or concerns, please contact our <br/>support team at </span><span className="text-indigo-500 lg:text-[15px] text-[12px]  md:text-xs md:font-normal font-medium font-['Poppins']">campus.mart@gmail.com</span><span className="text-[#000000] dark:text-zinc-100 lg:text-[15px] md:text-xs md:font-normal lg:font-medium font-['Poppins'] text-[12px]">.<br/><br/>Thank you for being part of the Campus Mart community!</span></div>
 
                 </div>
                 

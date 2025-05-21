@@ -2,17 +2,18 @@ import Profile_left_part from '../components/Profile_left_part';
 import Image1 from "../assets/earphone.png"
 import TabSwitcher from "../components/manageorderanime";
 import Header from "../components/Header";
+import whitebag from "../assets/whitebag.png";
 function ProductListed() {
     return (
         <>
                 <div className='h-screen w-screen dark:bg-[#131313] overflow-x-hidden '>
-            <Header  color={"#394ff1"} textColor={"white"} />
+            <Header  color={"#394ff1"} textColor={"white"} bagUrl={whitebag} />
             <div className='lg:flex md:flex'>
                 <div className="hidden md:block md:w-[35%] lg:w-[28%] pt-[3.5vh] px-[2vw] pb-[2vh]  bg-[#FBFBFB]  dark:bg-[#131313]">
                     <Profile_left_part />
                 </div>
                 <div className='lg:w-[72%] md:w-[65%] bg-[#FBFBFB] dark:bg-[#131313]'>
-                    <div className=" mx-[5.5vw] lg:mr-[3.2vw] lg:ml-[1.5vw]">
+                    <div className=" mx-[5.5vw] md:mr-[3vw] md:ml-[2vw] lg:mr-[3.2vw] lg:ml-[1.5vw]">
                         <div className="flex justify-between items-center">
                             <div className=" text-[1.1rem] mb-[2vh] mt-[3vh]  lg:mt-[5vh] lg:mb-[2vh] text-[#292929] dark:text-[#D6D6D6]  lg:text-[22px] lg:font-medium font-['Poppins'] ">Product Listed</div>
                             <div class="">

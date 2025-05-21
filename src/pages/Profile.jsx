@@ -19,6 +19,7 @@ import Header from '../components/Header';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../components/firebase";
 import { div } from 'framer-motion/client';
+import whitebag from "../assets/whitebag.png";
 
 function Profile() {
     const [uploading, setUploading] = useState(false);
@@ -158,14 +159,14 @@ function Profile() {
                 {userDetails ? (
                     <>
                         <div className=' min-h-screen w-full dark:bg-[#131313] oveflow-hidden'>
-                      <Header color={"#394ff1"} textColor={"white"} /> 
+                      <Header color={"#394ff1"} textColor={"white"} bagUrl={whitebag}/> 
                         <div className='lg:flex md:flex'>
-                            <div className="hidden md:block md:w-[37%] lg:w-[28%] pt-[3.5vh] px-[2vw] pb-[2vh] bg-[#FBFBFB]  dark:bg-[#131313] ">
+                            <div className="hidden md:block md:w-[37%] lg:w-[28%] pt-[3.5vh] pl-[2vw] pr-[1.75vw] pb-[2vh] bg-[#FBFBFB]  dark:bg-[#131313] ">
                                 <Profile_left_part />
                             </div>
                             <div className=' h-screen md:w-[63%] lg:w-[72%] overflow-y-auto no-scrollbar bg-[#FBFBFB] dark:bg-[#131313] ' >
 
-                                <div class="  bg-white dark:bg-[#1A1D20] rounded-[14px] lg:rounded-[20px] shadow-[0px_4px_10px_0px_rgba(54,54,54,0.10)] mx-[4.5vw] md:mr-[2.5vw] md:ml-[1.5vw] lg:mx-[4.5vw] overflow-hidden mt-[3vh]">
+                                <div class="  bg-white dark:bg-[#1A1D20] rounded-[14px] lg:rounded-[20px] shadow-[0px_4px_10px_0px_rgba(54,54,54,0.10)] mx-[4.5vw] md:mr-[2.5vw] md:ml-[1.5vw] lg:mx-[4.5vw] overflow-hidden mt-[3vh] md:mt-[5vh]">
                                     <div class="  bg-gradient-to-l from-[#364ef2] to-[#534ff2] flex items-center px-[5vw] py-[1.3vh] md:px-[4vw] md:py-[1.3vh] lg:px-[2.5vw] lg:py-[1.7vh] " >
                                         <div class="  px-[5px]  py-[5px] md:px-[5px]  md:py-[5px] lg:px-[5px] lg:py-[5px]   bg-[#292929] rounded-[63.23px] shadow-[0px_12.772851943969727px_10px_0px_rgba(0,0,0,0.10)] border border-white justify-center items-center inline-flex overflow-hidden">
                                             {/* <img class="w-[10vw] h-[5vh] md:h-[38px] md:w-[50px] lg:w-[80.76px] lg:h-[75px]" src={Image11} /> */}
@@ -350,13 +351,13 @@ function Profile() {
                                     </div>
 
 
-                                    <div className=" absolute top-[2vh] right-[1vw]">
+                                    <div className=" absolute md:top-[2vh] md:right-[1vw] top-[2vh] right-[2vw]">
                                         <div className="  bg-[#ebedff] rounded-[50px] flex items-center">
-                                            <div className="  text-[#4a4a4a] text-[11px] lg:text-sm font-normal font-['Poppins'] mr-[0.5vw] ml-[1vw]">Add New</div>
+                                            <div className="  text-[#4a4a4a] text-[11px] lg:text-sm font-normal font-['Poppins'] mr-[0.5vw] ml-[3vw] md:mr-[0.5vw] md:ml-[1vw]  ">New</div>
                                             <div className=" ">
-                                                <div className="  bg-[#4d4ef2] rounded-full p-[3px]">
+                                                <div className="  bg-[#4d4ef2] rounded-full py-[4px] px-[3px]">
                                                     <div data-svg-wrapper class=" ">
-                                                        <svg width="25" height="25" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <svg width="22" height="22" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M5.35901 20.3695H6.88673L17.3663 9.88992L15.8386 8.3622L5.35901 18.8418V20.3695ZM4.28693 22.5137C3.98317 22.5137 3.72873 22.4108 3.5236 22.2049C3.31848 21.9991 3.21556 21.7447 3.21484 21.4416V18.8418C3.21484 18.5559 3.26845 18.2833 3.37566 18.0238C3.48286 17.7644 3.63474 17.5367 3.83129 17.3409L17.3663 3.83265C17.5808 3.6361 17.8177 3.48422 18.0771 3.37701C18.3366 3.26981 18.6089 3.2162 18.8941 3.2162C19.1792 3.2162 19.4562 3.26981 19.7249 3.37701C19.9937 3.48422 20.2259 3.64504 20.4218 3.85945L21.8959 5.36037C22.1103 5.55692 22.2665 5.7892 22.3644 6.05722C22.4623 6.32524 22.5116 6.59326 22.5123 6.86129C22.5123 7.14717 22.463 7.41984 22.3644 7.67929C22.2658 7.93873 22.1096 8.1753 21.8959 8.389L8.38765 21.8973C8.1911 22.0938 7.9631 22.2457 7.70366 22.3529C7.44421 22.4601 7.1719 22.5137 6.88673 22.5137H4.28693ZM16.5891 9.13946L15.8386 8.3622L17.3663 9.88992L16.5891 9.13946Z" fill="white" />
                                                         </svg>
                                                     </div>

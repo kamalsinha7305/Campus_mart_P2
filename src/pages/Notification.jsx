@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../components/Header";
 import Profile_left_part from "../components/Profile_left_part";
-
+import whitebag from "../assets/whitebag.png";
 export default function Notification() {
   const [notes, setNotes] = useState([
     { id: 1, text: "Rahul sent you a message about MacBook Pro", color: "green" },
@@ -11,13 +11,23 @@ export default function Notification() {
     { id: 3, text: "Rahul sent you a message about MacBook Pro", color: "green" },
     { id: 4, text: "Rahul sent you a message about MacBook Pro", color: "red" },
   ]);
-
+  
   const markRead = id =>
     setNotes(prev => prev.filter(n => n.id !== id));
+   const getColorClass = (color) => {
+  switch (color) {
+    case "red":
+      return "bg-red-500";
+    case "green":
+      return "bg-green-500";
+    default:
+      return "bg-gray-400";
+  }
+};
 
   return (
     <>
-      <Header color={"#394ff1"} textColor={"white"} />
+      <Header color={"#394ff1"} textColor={"white"} bagUrl={whitebag} />
       <div className="md:flex lg:flex">
      
         <div className="hidden md:block md:w-[35%] lg:w-[28%] pt-[3.5vh] px-[2vw] pb-[2vh]  bg-[#FBFBFB]  dark:bg-[#131313]">
@@ -28,7 +38,8 @@ export default function Notification() {
         <div className='md:w-[65%] lg:w-[72%] flex flex-col bg-[#FBFBFB] dark:bg-[#131313]'>
           <div className="lg:ml-[1.5vw]  md:ml-[2vw] md:mr-[3.2vw]">
             <div className="mt-[5vh] mb-[2vh] max-sm:ml-[4vw]">
-              <div class="text-[#292929] dark:text-[#F1F1F1]  text-[18px] lg:text-[28px] font-medium font-['Poppins']">Notifications</div>
+              <div class="text-[#292929] dark:text-[#F1F1F1]  text-[18px] lg:text-[24px] font-medium font-['Poppins']">Notifications</div>
+              <div class="justify-start text-gray-500 text-sm  md:text-base  font-normal font-['Roboto']">Stay updated with your latest activities and messages.</div>
             </div>
 
             <AnimatePresence initial={false}>
@@ -37,6 +48,7 @@ export default function Notification() {
                   key={n.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
+                  whileHover={{ scale: 1.02 }}
                   exit={{ opacity: 0, x: 100 }}
                   transition={{ type: "tween", duration: 0.25 }}
                   className="relative sm:relative md:relative lg:flex items-center gap-[2vw] mb-[3vh] "
@@ -45,7 +57,7 @@ export default function Notification() {
                   <div className="relative bg-[#ebeeff] dark:bg-[#1A1D20] rounded-[12px]  overflow-hidden flex lg:items-center px-[0.7vw] py-[1.8vh] lg:w-[64vw] max-sm:h-[16vh]  max-sm:mx-[4vw] md:h-[15.5vh] lg:h-[11.5vh] ">
 
                     <div
-                      className={`bg-${n.color} rounded-[5px] p-[5px] flex items-center justify-center ml-[3.5vw] lg:ml-[1vw] `}
+                      className={`${getColorClass(n.color)} rounded-[5px] p-[5px] flex items-center justify-center ml-[3.5vw] lg:ml-[1vw] max-sm:h-[31px] md:h-[34px] md:mt-[1vh] lg:mt-[0] lg:h-[36px]  `}
                     >
 
                       <svg className="max-sm:h-[21px] max-sm:w-[21px]" width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
