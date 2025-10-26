@@ -91,6 +91,7 @@ function Signup() {
           lastName: lname,
           photo: "",
           phone:"",
+          address:"",
         
         });
       }
@@ -182,7 +183,7 @@ function Signup() {
                 <input className='form-control  w-[77vw] h-[5.2vh] rounded-[3px]  lg:w-[24.5vw] lg:h-[5.8vh] lg:rounded-[5px] font-normal lg:font-semibold border border-[#bbc2c9]  mb-[1.2vh] pl-[4vw] lg:pl-[1.3vw] text-[12.5px] dark:text-white dark:bg-[#1a1d20]'
                   type={showPassword ? 'text' : 'password'}
                   name='password'
-                  autoFocus
+                 
                   placeholder='Create your  Password'
                   onChange={(e) => setPassword(e.target.value)}
                   required

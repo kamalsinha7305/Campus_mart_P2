@@ -1,12 +1,12 @@
 "use client";
-
+import { motion, AnimatePresence } from "framer-motion";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
 import EditButton from "./editbutton";
 import "./deletestyle.css";
-import { auth } from "../components/firebase"; 
-import {reauthenticateWithCredential,EmailAuthProvider,updatePassword,}from "firebase/auth";
-import {toast} from "react-toastify";
+import { auth } from "../components/firebase";
+import { reauthenticateWithCredential, EmailAuthProvider, updatePassword, } from "firebase/auth";
+import { toast } from "react-toastify";
 export default function SecuritySettings() {
 
   const [oldPassword, setOldPassword] = useState("");
@@ -40,7 +40,7 @@ export default function SecuritySettings() {
 
       setMessage("Password updated successfully.");
       toast.success("password updated successfuly.");
-      
+
 
     } catch (error) {
       setMessage(error.message);
@@ -88,17 +88,16 @@ export default function SecuritySettings() {
         </div>
       </div>
 
-   
-      <Dialog.Root 
+
+      <Dialog.Root
         onOpenChange={(open) => setIsEditing(open)} // Update state when modal opens/closes
       >
         <Dialog.Trigger asChild >
-        <div className="absolute top-4 right-2 md:top-4 md:right-4  ">
-      <EditButton isEditing={isEditing} />
-    </div>
+          <div className="absolute top-4 right-2 md:top-4 md:right-4  ">
+            <EditButton isEditing={isEditing} />
+          </div>
         </Dialog.Trigger>
 
-        {/* Modal Popup */}
         <Dialog.Portal>
           <Dialog.Overlay className="DialogOverlay fixed inset-0  " />
           <Dialog.Content className="fixed top-[40%] md:top-[50%] lg:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#131313] px-6 py-3 lg:p-6 rounded-xl shadow-lg lg:w-[400px] w-[85vw] md:w-[58vw]">
@@ -116,7 +115,7 @@ export default function SecuritySettings() {
                   type="password"
                   className="w-full max-sm:py-[0.4vh] md:p-1 lg:p-2 border rounded-md md:mt-2 lg:mt-1"
                   value={oldPassword}
-                  onChange={(e)=> setOldPassword(e.target.value)}
+                  onChange={(e) => setOldPassword(e.target.value)}
                 />
               </div>
               <div>
@@ -137,12 +136,22 @@ export default function SecuritySettings() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
-               <div>
-                
-               {message && (
-                <p className="text-sm text-red-500 mt-3">{message}</p>
-                 )}
-               </div>
+              <div>
+
+                <AnimatePresence>
+                  {message && (
+                    <motion.div
+                      initial={{ x: -40, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: -100, opacity: 0 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className="bg-red-100 text-red-800 text-sm font-medium px-4 py-1 rounded-md border border-red-400 mb-[1vh] mt-[1.5vh] inline-block"
+                    >
+                      ⚠️ {message}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
               <div className="flex justify-end gap-4 lg:gap-4 mt-4">
                 <Dialog.Close asChild>
                   <button className=" bg-gray-500 text-white px-[2.8vw] lg:px-[1.5vw] text-[14px]  rounded-md py-[0.6vh] lg:text-[16px] font-normal lg:font-medium ">

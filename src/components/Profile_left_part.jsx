@@ -1,11 +1,16 @@
 import { Link, useLocation } from 'react-router-dom'
 import Image1 from "../assets/imageprofile.png"
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc  } from "firebase/firestore";
 import { auth, db } from "./firebase"
 import { MessageSquare, Bell, Heart, Mail, ReceiptText, ShoppingBag, ShoppingCart } from "lucide-react";
 import whitebag from "../assets/whitebag.png";
 import { useTheme } from "./ThemeContext";
+
+
+
+
+
 function Profile_left_part() {
       const { darkMode, toggleDarkMode } = useTheme();
     /* 
@@ -27,23 +32,32 @@ function Profile_left_part() {
             : " text-[#292929]  dark:text-white"}
   `;
     const [userDetails, setUserDetails] = useState(null);
-    const fetchUserData = async () => {
-        auth.onAuthStateChanged(async (user) => {
-            console.log(user);
+   
+   
+   
+useEffect(() => {
+  const fetchData = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        const docRef = doc(db, "Users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setUserDetails(data);
+          setPhone(data.phone || "");
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+  };
 
-            const docRef = doc(db, "Users", user.uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                setUserDetails(docSnap.data());
-                console.log(docSnap.data());
-            } else {
-                console.log("User is not logged in");
-            }
-        });
-    };
-    useEffect(() => {
-        fetchUserData();
-    }, []);
+  fetchData();
+}, []);
+
     return (
         <>
          
@@ -55,8 +69,8 @@ function Profile_left_part() {
                                     <div class="bg-[#f6f7ff] dark:bg-[#282A2C] rounded-lg flex items-center p-5 md:p-4  pl-[3.5vw] md:pl-[1.8vw] lg:pl-[1.4vw]  md:mx-0 mb-[2vh] md:mb-[2vh] transition-all duration-300 cursor-pointer hover:bg-[#e9ecff] hover:scale-105 ">
                                         <img class=" rounded-full w-[47px] h-[47px] lg:w-[55px] lg:h-[55px] md:mr-[1vw] mr-[2.5vw] " src={Image1} />
                                         <div className="flex flex-col ">
-                                            <div class=" text-black dark:text-white  text-[13px] md:text-[14px] lg:text-[16px] font-normal font-['Poppins']">Kamal Sinha</div>
-                                            <div class=" text-[#979797] text-[10px] md:text-[9px] lg:text-[0.8rem] font-normal font-['Poppins']">Kamal.sinha2022@vitstudent.ac.in</div>
+                                            <div className=" text-black dark:text-white  text-[13px] md:text-[14px] lg:text-[16px] font-normal font-['Poppins']">{userDetails?.firstname || "User"}!  </div>
+                                            <div className=" text-[#979797] text-[10px] md:text-[9px] lg:text-[0.8rem] font-normal font-['Poppins']">  </div>
                                         </div>
                                        {/*  <div data-svg-wrapper class="  hidden md:block absolute right-[1vw] top-[1vh] ">
                                             <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
