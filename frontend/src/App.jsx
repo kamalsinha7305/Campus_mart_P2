@@ -1,101 +1,120 @@
-import { useState } from 'react'
-import './App.css'
+import { useState, useEffect } from 'react';
+import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-// PROBLEMATIC STATEMENT CAUSING PROBLEMS IN THIS CODE  import {BrowserRouter as Router,Routes,Route,Outlet, Navigate } from "react-router-dom"
+
 import Signup from './components/Signup';
 import Login from './components/Login';
-// PROBLEMATIC IN THIS PART ALSO import Home from './components/Home';
-//import RefrshHandler from './RefrshHandler';
-import "react-toastify/dist/ReactToastify.css";
 import Profile from './pages/Profile';
 import Termscondition from './pages/Termscondition';
 import Notification from './pages/Notification';
 import Myorders from './pages/Myorders';
-import Wishlist from './pages/Wishlist'
-import { useEffect } from "react";
-import { auth } from "./components/firebase";
-import { ToastContainer } from "react-toastify";
-import Loader from './components/Loder';
+import Wishlist from './pages/Wishlist';
 import ProductListed from './pages/ProductListed';
+import ContactUs from './pages/ContactUs';
+
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { auth } from "./components/firebase";
+import Loader from './components/Loder';
+
 function App() {
+  // undefined = still checking, null = not logged in, object = logged in
+  const [user, setUser] = useState(undefined);
 
-  /*  const [isAuthenticated, setIsAuthenticated] = useState(false);
- 
-   const PrivateRoute = ({ element }) => {
-     return isAuthenticated ? element : <Navigate to="/login" />
-   }
-  */
-  const [user, setUser] = useState();
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      setUser(firebaseUser || null);
     });
-  
-    return () => unsubscribe(); // Cleanup to prevent memory leaks
+
+    return () => unsubscribe();
   }, []);
+
   return (
-    <>
+    <BrowserRouter>
+      <div className='App'>
+        <div className='auth-wrapper'>
+          <div className='auth-inner'>
+            <Routes>
+              {/* ROOT: if logged in -> profile, else -> login */}
+              <Route
+                path="/"
+                element={
+                  user ? <Navigate to="/profile" /> : <Login />
+                }
+              />
 
-      <BrowserRouter>
-        <div className='App'>
-          <div className='auth-wrapper'>
-            <div className='auth-inner'>
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    user === undefined ? (
-                       <Loader/> // Show a loader while checking auth state
-                    ) : user ? (
-                      <Navigate to="/profile" />
-                    ) : (
-                      <Login />
-                    )
-                  }
-                />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/notification" element={<Notification />} />
-                <Route path="/termscondition" element={<Termscondition />} />
-                <Route path="/myorders" element={<Myorders />} />
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/productlisted" element={<ProductListed/>}/>
+              {/* LOGIN: redirect to profile if already logged in */}
+              <Route
+                path="/login"
+                element={
+                  user ? <Navigate to="/profile" /> : <Login />
+                }
+              />
 
-              </Routes>
-              <ToastContainer />
-            </div>
+              {/* SIGNUP: redirect to profile if already logged in */}
+              <Route
+                path="/signup"
+                element={
+                  user ? <Navigate to="/profile" /> : <Signup />
+                }
+              />
+
+              {/* PROTECTED ROUTES */}
+              <Route
+                path="/profile"
+                element={
+                  user ? <Profile /> : <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/notification"
+                element={
+                  user ? <Notification /> : <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/myorders"
+                element={
+                  user ? <Myorders /> : <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/wishlist"
+                element={
+                  user ? <Wishlist /> : <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/productlisted"
+                element={
+                  user ? <ProductListed /> : <Navigate to="/login" />
+                }
+              />
+
+              {/* PUBLIC PAGES */}
+              <Route
+                path="/termscondition"
+                element={<Termscondition />}
+              />
+              <Route
+                path="/contact"
+                element={<ContactUs />}
+              />
+            </Routes>
+
+            <ToastContainer />
           </div>
         </div>
-      </BrowserRouter>
 
-
-
-      {/*   <div className="App">
-      <RefrshHandler setIsAuthenticated={setIsAuthenticated} />
-      <Routes>
-        <Route path='/' element={<Navigate to="/login" />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/home' element={<PrivateRoute element={<Home />} />} />
-      </Routes>
-    </div> */}
-
-
-      {/*    <div className='App'>
-        <Routes>
-          <Route path='/' element={<Navigate to="/signup" />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-        </Routes>
-       
-      </div> 
- */}
-
-    </>
-  )
+        {/* 🔹 ONLY show this while auth is initializing */}
+        {user === undefined && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
+            <Loader />
+          </div>
+        )}
+      </div>
+    </BrowserRouter>
+  );
 }
 
-
-export default App
+export default App;

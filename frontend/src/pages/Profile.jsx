@@ -14,12 +14,12 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth, db } from "../components/firebase";
 
-import { Pencil } from "lucide-react";
 import { toast } from 'react-toastify';
 import EditButton from '../components/editbutton';
 import SecuritySettings from '../components/SecuritySettings';
 import Header from '../components/Header';
-
+import AddressModal from '../components/AddressModal'; // Add this line
+import { Pencil, Plus, Trash2 } from "lucide-react"; // Added Trash2
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../components/firebase";
@@ -39,59 +39,117 @@ function Profile() {
     const [isEditing, setIsEditing] = useState(false);
     const [userDetails, setUserDetails] = useState(null);
 
-    /* 
-    
-         const [isEditing, setIsEditing] = useState(false); */
+  // --- NEW ADDRESS STATE ---
+    const [addresses, setAddresses] = useState([]); // Store array of addresses
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingIndex, setEditingIndex] = useState(null); 
 
     const [formData, setFormData] = useState({
         line1: '',
         line2: '',
-        line3: '',
+        state: '',
+        city: '',
+        pincode: ''
     });
-
-
-
-    const fetchUserData = async () => {
-        auth.onAuthStateChanged(async (user) => {
-            console.log(user);
-
-            const docRef = doc(db, "Users", user.uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                setUserDetails(docSnap.data());
-                const data = docSnap.data();
-                console.log(docSnap.data());
-                setPhotoURL(data.photo || "");
-            } else {
-                console.log("User is not logged in");
-            }
-
-            if (!lines[0] || !lines[1] || !lines[2]) {
-                setIsEditing(true);
-            }
-        });
-    };
-    useEffect(() => {
-        fetchUserData();
-    }, []);
-
-
-    const isAddressIncomplete = !formData.line1 || !formData.line2 || !formData.line3;
-
-    const toggleEdit = async () => {
-        if (isEditing) {
-
+useEffect(() => {
+        const fetchData = async () => {
             const user = auth.currentUser;
             if (user) {
-                const address = [formData.line1, formData.line2, formData.line3].join('\n');
+                const docRef = doc(db, "Users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    setUserDetails(data);
+                    setPhone(data.phone || "");
+
+                    // LOAD ADDRESSES
+                    if (data.savedAddresses && Array.isArray(data.savedAddresses)) {
+                        setAddresses(data.savedAddresses);
+                    } else if (data.addressDetails) {
+                        // Migrate legacy single address to array
+                        setAddresses([data.addressDetails]);
+                    }
+                }
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handleAddClick = () => {
+        setEditingIndex(null); // Null means we are adding a NEW address
+        setIsModalOpen(true);
+    };
+
+    const handleEditClick = (index) => {
+        setEditingIndex(index); // Set the specific index we want to edit
+        setIsModalOpen(true);
+    };
+
+const handleSaveAddress = async (newAddressData) => {
+        try {
+            const user = auth.currentUser;
+            if (user) {
+                let updatedAddresses = [...addresses];
+
+                if (editingIndex !== null) {
+                    // Update existing address
+                    updatedAddresses[editingIndex] = newAddressData;
+                } else {
+                    // Add new address
+                    updatedAddresses.push(newAddressData);
+                }
+
+                setAddresses(updatedAddresses);
+
+                // Save array to Firestore
                 const docRef = doc(db, "Users", user.uid);
                 await updateDoc(docRef, {
-                    address,
+                    savedAddresses: updatedAddresses,
+                     // Update legacy field for backward compatibility if needed
+                    addressDetails: updatedAddresses[0] || {} 
                 });
+                
+                toast.success(editingIndex !== null ? "Address updated!" : "New address added!");
+                setIsModalOpen(false);
             }
+        } catch (error) {
+            console.error("Error updating address:", error);
+            toast.error("Failed to update address");
         }
-        setIsEditing(!isEditing);
     };
+    // Calculate if incomplete for the warning message
+    const isAddressIncomplete = !formData.line1 || !formData.city || !formData.pincode;
+
+    // --- DELETE ADDRESS FUNCTION ---
+    const handleDeleteAddress = async (indexToDelete) => {
+        // 1. Confirm before deleting
+        if (!window.confirm("Are you sure you want to delete this address?")) return;
+
+        try {
+            const user = auth.currentUser;
+            if (user) {
+                // 2. Filter out the address at the specific index
+                const updatedAddresses = addresses.filter((_, index) => index !== indexToDelete);
+                
+                // 3. Update Local State
+                setAddresses(updatedAddresses);
+
+                // 4. Update Firebase
+                const docRef = doc(db, "Users", user.uid);
+                await updateDoc(docRef, {
+                    savedAddresses: updatedAddresses,
+                    // Ensure the main address field is updated to the new first address (or empty)
+                    addressDetails: updatedAddresses[0] || {} 
+                });
+
+                toast.success("Address deleted successfully");
+            }
+        } catch (error) {
+            console.error("Error deleting address:", error);
+            toast.error("Failed to delete address");
+        }
+    };
+
 
     async function handleLogout() {
         try {
@@ -103,30 +161,7 @@ function Profile() {
         }
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const user = auth.currentUser;
-            if (user) {
-                const docRef = doc(db, "Users", user.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    setUserDetails(data);
-                    setPhone(data.phone || "");
-
-                    if (data.address) {
-                        const lines = data.address.split('\n');
-                        setFormData({
-                            line1: lines[0] || '',
-                            line2: lines[1] || '',
-                            line3: lines[2] || '',
-                        });
-                    }
-                }
-            }
-        };
-        fetchData();
-    }, []);
+ 
 
     const sendOtp = async () => {
         if (!phone || !phone.startsWith("+")) {
@@ -209,7 +244,7 @@ function Profile() {
                 {userDetails ? (
                     <>
                         <div className=' min-h-screen w-full dark:bg-[#131313] oveflow-hidden'>
-                            <Header color={"#394ff1"} textColor={"white"} bagUrl={whitebag} />
+                            <Header  bagUrl={whitebag} />
                             <div className='lg:flex md:flex'>
                                 <div className="hidden md:block md:w-[37%] lg:w-[28%] pt-[3.5vh] pl-[2vw] pr-[1.75vw] pb-[2vh] bg-[#FBFBFB]  dark:bg-[#131313] ">
                                     <Profile_left_part />
@@ -217,13 +252,17 @@ function Profile() {
                                 <div className=' h-screen md:w-[63%] lg:w-[72%] overflow-y-auto no-scrollbar bg-[#FBFBFB] dark:bg-[#131313] ' >
 
                                     <div class="  bg-white dark:bg-[#1A1D20] rounded-[14px] lg:rounded-[20px] shadow-[0px_4px_10px_0px_rgba(54,54,54,0.10)] mx-[4.5vw] md:mr-[2.5vw] md:ml-[1.5vw] lg:mx-[4.5vw] overflow-hidden mt-[3vh] md:mt-[5vh]">
-                                        <div class="  bg-gradient-to-l from-[#364ef2] to-[#534ff2] flex items-center px-[5vw] py-[1.3vh] md:px-[4vw] md:py-[1.3vh] lg:px-[2.5vw] lg:py-[1.7vh] " >
-                                            <div class="  px-[5px]  py-[5px] md:px-[5px]  md:py-[5px] lg:px-[5px] lg:py-[5px]   bg-[#292929] rounded-[63.23px] shadow-[0px_12.772851943969727px_10px_0px_rgba(0,0,0,0.10)] border border-white justify-center items-center inline-flex overflow-hidden">
+                                        <div class="  bg-gradient-to-l from-[#364ef2] to-[#534ff2] flex items-center px-[5vw] py-[1.3vh] md:px-[4vw] md:py-[1.3vh] lg:px-[2.5vw] lg:py-[2.2vh] " >
+                                            <div className='relative'>
+                                            <div class=" px-[5px]  py-[5px] md:px-[5px]  md:py-[5px] lg:px-[5px] lg:py-[5px]   bg-[#292929] rounded-[63.23px] shadow-[0px_12.772851943969727px_10px_0px_rgba(0,0,0,0.10)] border border-white justify-center items-center inline-flex overflow-hidden">
                                                 {/* <img class="w-[10vw] h-[5vh] md:h-[38px] md:w-[50px] lg:w-[80.76px] lg:h-[75px]" src={Image11} /> */}
+                                            
                                                 <img src={userDetails.photoURL || Image11}
                                                     alt="Profile"
                                                     className="w-[42px] h-[42px] md:h-[45px] md:w-[45px] lg:w-[60px] lg:h-[60px]"
                                                 />
+                                                
+                                                        
 
 
                                                 {/* {photoURL ? (
@@ -234,15 +273,22 @@ function Profile() {
                                         <input type="file" accept="image/*" onChange={handleImageUpload} /> */}
 
                                             </div>
+                                            <div><button
+                                                            className={`w-6 h-6 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 ease-in-out absolute bottom-0 right-0 bg-white hover:scale-110`}
+                                                        >
+                                                         <Pencil size={14} color="blue" />
+                                                        </button>
+                                            </div>
+                                            </div>
                                             {/* {uploading && <p className="text-xs text-gray-500 mt-2">Uploading...</p>} */}
 
                                             <div className='flex flex-col ml-[4vw] md:ml-[1.5vw] lg:ml-[2vw]'>
                                                 <div class="  text-white text-[12px] lg:text-[22px] font-semibold font-['Poppins']">{userDetails.firstName} {userDetails.lastName} </div>
-                                                <div class="  text-white text-[9px] lg:text-lg font-light font-['Poppins']">Member since October 2022</div>
+                                                <div class="  text-white text-[9px] lg:text-base font-light font-['Poppins']">Member since October 2022</div>
                                             </div>
                                         </div>
 
-                                        <div className='flex justify-evenly items-center py-[3.3vh]' >
+                                        <div className='flex justify-evenly items-center py-[3.8vh]' >
 
                                             <div class="">
                                                 <div class=" h-[10vh] w-[25vw] md:h-[12vh] md:w-[12vw]  lg:h-[13vh] lg:w-[12vw]  bg-[#fbfbfb]/25 dark:bg-[#2D3339] rounded-xl shadow-[0px_4px_10px_0px_rgba(0,0,0,0.12)]  flex flex-col justify-center items-center">
@@ -365,109 +411,112 @@ function Profile() {
                                     <EditButton />
                                 </div>
                             </div> */}
-                                    <div className="bg-white dark:bg-[#1A1D20] rounded-[20px] shadow-[0px_4px_10px_0px_rgba(101,101,101,0.10)] mx-[4.5vw] md:mr-[2.5vw] md:ml-[1.5vw] lg:mx-[4.5vw] mt-[3.7vh] pt-[4vh] pb-[4.5vh] relative">
-                                        <div className="text-[#2d3339] dark:text-[#D7D7D7] lg:text-xl text-[14px] font-medium lg:font-semibold font-['Poppins'] ml-[2.6vw] mb-[2.5vh]">
-                                            Address
-                                        </div>
-
-                                        <div className="lg:flex lg:justify-start max-sm:mr-[10vw] max-sm:ml-[7vw] lg:ml-[9vw] gap-[10vw]">
-                                            <div>
 
 
 
-                                                <div className="bg-[#f2f3ff] dark:bg-[#2D3339] rounded-[8px] py-[3vh] pl-[6vw] lg:rounded-[18px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.12)] flex flex-col lg:mx-[0] justify-center md:mx-[3vw] md:py-[1.9vh] md:mb-[2.8vh] lg:w-[19.5vw] lg:h-[21vh] relative md:w-[40.5vw]  md:h-[20vh] lg:pl-[2vw]  mb-[2.8vh] ">
-                                                    <div className="text-[#2d3339] dark:text-[#EBEDFF] lg:text-[16px] text-[13px] font-medium lg:font-semibold font-['Poppins'] mb-[0.8vh]">
-                                                        Campus Address
-                                                    </div>
+{/* --- ADDRESS SECTION START --- */}
+                            <div className="bg-white dark:bg-[#1A1D20] rounded-[20px] shadow-[0px_4px_10px_0px_rgba(101,101,101,0.10)] mx-[4.5vw] md:mr-[2.5vw] md:ml-[1.5vw] lg:mx-[4.5vw] mt-[3.7vh] pt-[4vh] pb-[4.5vh] relative">
+                                <div className="text-[#2d3339] dark:text-[#D7D7D7] lg:text-xl text-[14px] font-medium lg:font-semibold font-['Poppins'] ml-[2.6vw] mb-[2.5vh]">
+                                    Address
+                                </div>
 
-
-                                                    <div className="text-[#64707d] lg:text-sm text-[11px] font-['Poppins']  min-h-[9vh] flex flex-col justify-center" >
-                                                        {isEditing ? (
-                                                            <>
-                                                                <input
-                                                                    type="text"
-                                                                    value={formData.line1}
-                                                                    onChange={(e) => setFormData({ ...formData, line1: e.target.value })}
-                                                                    className={`mb-1 bg-transparent focus:outline-none text-[11px] lg:text-sm font-['Poppins'] transition-colors duration-300 ${formData.line1 ? 'text-[#2d3339] font-normal dark:text-white' : 'text-[#a0a0a0] dark:text-[#999]'
-                                                                        }`}
-                                                                    placeholder="Line 1"
-                                                                />
-                                                                <input
-                                                                    type="text"
-                                                                    value={formData.line2}
-                                                                    onChange={(e) => setFormData({ ...formData, line2: e.target.value })}
-                                                                    className={`mb-1 bg-transparent focus:outline-none text-[11px] lg:text-sm font-['Poppins'] transition-colors duration-300 ${formData.line2 ? 'text-[#2d3339] dark:text-white font-normal' : 'text-[#a0a0a0] dark:text-[#999]'
-                                                                        }`}
-                                                                    placeholder="Line 2"
-                                                                />
-                                                                <input
-                                                                    type="text"
-                                                                    value={formData.line3}
-                                                                    onChange={(e) => setFormData({ ...formData, line3: e.target.value })}
-                                                                    className={`bg-transparent focus:outline-none text-[11px] lg:text-sm font-['Poppins'] transition-colors duration-300 ${formData.line3 ? 'text-[#2d3339] dark:text-white font-normal' : 'text-[#a0a0a0] dark:text-[#999]'
-                                                                        }`}
-                                                                    placeholder="Line 3"
-                                                                />
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <div className="flex flex-col gap-[3px]">
-                                                                    <div>{formData.line1}</div>
-                                                                    <div>{formData.line2}</div>
-                                                                    <div>{formData.line3}</div>
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                    </div>
-
-                                                    <button
-                                                        className={`text-white lg:text-[12px] text-[10px] font-normal font-['Poppins'] rounded-[5px] lg:rounded-[5px] lg:px-[0.8vw] px-[2vw] py-[0.3vh] absolute top-[2vh] right-[1.5vw] lg:right-[0.8vw] transition-all duration-300 ease-in-out ${isEditing ? 'bg-red-500' : 'bg-[#4d4ef2]'
-                                                            }`}
-                                                    >
-                                                        Primary
-                                                    </button>
-
-                                                    <div className="absolute bottom-[1.4vh] right-[1vw]">
-                                                        <button
-                                                            onClick={toggleEdit}
-                                                            className={`w-8 h-8 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 ease-in-out ${isEditing
-                                                                ? 'bg-red-500 scale-125 hover:scale-[1.35]'
-                                                                : 'bg-[#4848f6] hover:bg-[#4747f4] hover:scale-110'
-                                                                } hover:shadow-xl hover:translate-y-[-4px] active:scale-95`}
-                                                        >
-                                                            <Pencil size={17} color="white" />
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-
-
-
-
-
-
+                                <div className="flex flex-wrap gap-[3vw] lg:gap-[1.5vw] px-[4vw] lg:px-[2.6vw]">
+                                    
+                                  
+                                    {addresses.map((addr, index) => (
+                                        <div key={index} className="bg-[#f2f3ff] dark:bg-[#2D3339] rounded-[8px] py-[3vh] pl-[6vw] lg:rounded-[18px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.12)] flex flex-col justify-center relative w-full md:w-[40vw] lg:w-[19.5vw] lg:h-[21vh] lg:pl-[2vw] mb-[2vh]">
+                                            <div className="text-[#2d3339] dark:text-[#EBEDFF] lg:text-[16px] text-[13px] font-medium lg:font-semibold font-['Poppins'] mb-[0.8vh]">
+                                                {index === 0 ? "Campus Address" : `Address ${index + 1}`}
                                             </div>
 
-                                        </div>
+                                            <div className="text-[#64707d] lg:text-[12.5px] text-[11px] font-['Poppins'] min-h-[9vh] flex flex-col justify-center">
+                                                <div className="flex flex-col gap-[3px] text-[#2d3339] dark:text-[#D7D7D7]">
+                                                    <div className="font-medium truncate pr-4">{addr.line1}</div>
+                                                    <div className="truncate pr-4">{addr.line2}</div>
+                                                    <div>
+                                                        {addr.city} {addr.pincode ? `- ${addr.pincode}` : ''}
+                                                    </div>
+                                                </div>
+                                            </div>
 
-
-                                        <AnimatePresence>
-                                            {isAddressIncomplete && (
-                                                <motion.div
-                                                    initial={{ x: -100, opacity: 0 }}
-                                                    animate={{ x: 0, opacity: 1 }}
-                                                    exit={{ x: -100, opacity: 0 }}
-                                                    transition={{ duration: 0.4, ease: "easeOut" }}
-                                                    className="bg-red-100 text-red-800 text-sm font-medium px-4 py-[6px] rounded-md border border-red-400 mx-[2.5vw] mb-[1vh] mt-[1.5vh] inline-block"
-                                                >
-                                                    ⚠️ Please complete your campus address details.
-                                                </motion.div>
+                                            {/* Primary Badge for the first one */}
+                                            {index === 0 && (
+                                                <div className="bg-[#4d4ef2] text-white lg:text-[12px] text-[10px] font-normal font-['Poppins'] rounded-[5px] px-[2vw] lg:px-[0.8vw] py-[0.3vh] absolute top-[2vh] right-[1.5vw] lg:right-[0.8vw]">
+                                                    Primary
+                                                </div>
                                             )}
-                                        </AnimatePresence>
+
+                                            {/* ACTION BUTTONS (EDIT & DELETE) */}
+                                            <div className="absolute bottom-[1.4vh] right-[1vw] flex gap-2">
+                                                
+                                                {/* Delete Button (Red) */}
+                                                <button
+                                                    onClick={() => handleDeleteAddress(index)}
+                                                    className="w-8 h-8 flex items-center justify-center rounded-full shadow-lg bg-white border border-red-500 hover:bg-red-50 transition-all active:scale-95 group"
+                                                    title="Delete Address"
+                                                >
+                                                    <Trash2 size={16} className="text-red-500" />
+                                                </button>
+
+                                                {/* Edit Button (Blue) */}
+                                                <button
+                                                    onClick={() => handleEditClick(index)}
+                                                    className="w-8 h-8 flex items-center justify-center rounded-full shadow-lg bg-[#4848f6] hover:bg-[#4747f4] hover:scale-110 transition-all active:scale-95"
+                                                    title="Edit Address"
+                                                >
+                                                    <Pencil size={17} color="white" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    {/* 2. ADD BUTTON CARD (Shows if addresses < 3) */}
+                                    {addresses.length < 3 && (
+                                        <button
+                                            onClick={handleAddClick}
+                                            className="bg-white border-2 border-dashed border-[#4d4ef2] dark:bg-[#2D3339] dark:border-[#4d4ef2] rounded-[8px] lg:rounded-[18px] flex flex-col items-center justify-center relative w-full md:w-[40vw] lg:w-[19.5vw] min-h-[15vh] lg:h-[21vh] mb-[2vh] hover:bg-[#f2f3ff] dark:hover:bg-[#363b41] transition-colors group"
+                                        >
+                                            <div className="bg-[#4d4ef2] rounded-full p-3 shadow-lg group-hover:scale-110 transition-transform">
+                                                <Plus size={24} color="white" />
+                                            </div>
+                                            <div className="text-[#4d4ef2] font-medium mt-3 font-['Poppins'] text-sm">
+                                                Add New Address
+                                            </div>
+                                        </button>
+                                    )}
+
+                                </div>
+
+                                {/* Warning if 0 addresses */}
+                                <AnimatePresence>
+                                    {isAddressIncomplete && (
+                                        <motion.div
+                                            initial={{ x: -100, opacity: 0 }}
+                                            animate={{ x: 0, opacity: 1 }}
+                                            exit={{ x: -100, opacity: 0 }}
+                                            className="bg-red-100 text-red-800 text-sm font-medium px-4 py-[6px] rounded-md border border-red-400 mx-[2.5vw] mt-[1.5vh] inline-block"
+                                        >
+                                            ⚠️ Please add at least one address.
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                            {/* --- ADDRESS SECTION END --- */}
+
+                            {/* Modal Component Call - Update initialData logic */}
+                            <AddressModal 
+                                isOpen={isModalOpen}
+                                onClose={() => setIsModalOpen(false)}
+                                onSave={handleSaveAddress}
+                                // If editingIndex is null, pass empty object. If not null, pass the specific address.
+                                initialData={editingIndex !== null ? addresses[editingIndex] : {
+                                    line1: '', line2: '', state: '', city: '', pincode: ''
+                                }}
+                            />
 
 
 
-                                    </div>
+
 
                                     {/* 
       <div className="absolute md:top-[2vh] md:right-[1vw] top-[2vh] right-[2vw]">

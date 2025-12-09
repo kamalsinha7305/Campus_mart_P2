@@ -13,7 +13,10 @@ const app = express();
 // Middleware
 app.use(cors({
   // Add both your deployed and local frontend URLs to the guest list
-  origin: ['http://localhost:5173'],
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174'  
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 })); // Allows your frontend to make requests

@@ -6,7 +6,7 @@ function Termscondition(){
     return(
         <>
         <div className="w-full flex flex-col overflow-hidden  min-h-screen dark:bg-[#131313]">
-         <Header color={"#394ff1"} textColor={"white"} bagUrl={whitebag}/>
+         <Header  bagUrl={whitebag}/>
         <div className='lg:flex md:flex'>
                 <div className="hidden md:block md:w-[35%] lg:w-[28%] pt-[3.5vh] pl-[2vw] pr-[1.75vw] pb-[2vh]  bg-[#FBFBFB]  dark:bg-[#131313]">
                     <Profile_left_part />

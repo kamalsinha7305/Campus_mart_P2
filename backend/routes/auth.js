@@ -7,6 +7,7 @@ const verifyToken = require('../middleware/verifyToken');
 
 // Route for Google Sign-In (checks for user, creates profile if new)
 // This route is now POST /api/auth/google-signin
+
 router.post('/google-signin', verifyToken, async (req, res) => {
   const { uid, email, name, picture } = req.user;
   const userDocRef = db.collection('Users').doc(uid);

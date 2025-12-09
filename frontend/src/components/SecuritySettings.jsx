@@ -3,17 +3,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
 import EditButton from "./editbutton";
-import "./deletestyle.css";
 import { auth } from "../components/firebase";
 import { reauthenticateWithCredential, EmailAuthProvider, updatePassword, } from "firebase/auth";
 import { toast } from "react-toastify";
+import { X } from "lucide-react"; // Import X icon
+
 export default function SecuritySettings() {
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
-  const handleChangePassword = async () => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault(); // Prevent form submission refresh
+    
     if (!oldPassword || !newPassword || !confirmPassword) {
       setMessage("Please fill in all fields.");
       toast.error("Please fill in all fields.");
@@ -33,22 +38,23 @@ export default function SecuritySettings() {
     );
 
     try {
-
       await reauthenticateWithCredential(user, credential);
-
       await updatePassword(user, newPassword);
 
       setMessage("Password updated successfully.");
-      toast.success("password updated successfuly.");
-
+      toast.success("Password updated successfully.");
+      setIsEditing(false); // Close modal on success
+      
+      // Clear fields
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
 
     } catch (error) {
       setMessage(error.message);
+      toast.error(error.message);
     }
   };
-
-
-  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <div className="bg-white dark:bg-[#1A1D20] rounded-[20px] shadow-[0px_4px_10px_0px_rgba(101,101,101,0.10)] mx-[4.5vw] md:mr-[2.5vw] md:ml-[1.5vw] lg:mx-[4.5vw] mt-[3.7vh] pt-[4vh] pb-[2vh] relative">
@@ -88,80 +94,97 @@ export default function SecuritySettings() {
         </div>
       </div>
 
-
-      <Dialog.Root
-        onOpenChange={(open) => setIsEditing(open)} // Update state when modal opens/closes
-      >
+      {/* --- RADIX DIALOG START --- */}
+      <Dialog.Root open={isEditing} onOpenChange={setIsEditing}>
         <Dialog.Trigger asChild >
-          <div className="absolute top-4 right-2 md:top-4 md:right-4  ">
+          <div className="absolute top-4 right-2 md:top-4 md:right-4">
             <EditButton isEditing={isEditing} />
           </div>
         </Dialog.Trigger>
 
         <Dialog.Portal>
-          <Dialog.Overlay className="DialogOverlay fixed inset-0  " />
-          <Dialog.Content className="fixed top-[40%] md:top-[50%] lg:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#131313] px-6 py-3 lg:p-6 rounded-xl shadow-lg lg:w-[400px] w-[85vw] md:w-[58vw]">
-            <Dialog.Title className="text-[15px]  dark:text-white md:text-lg   lg:text-lg font-semibold">
-              Change Password
-            </Dialog.Title>
-            <Dialog.Description className="text-[11px] md:text-sm text-gray-500">
+          {/* Overlay with Backdrop Blur */}
+          <Dialog.Overlay className="fixed inset-0 z-[999] bg-black/60 backdrop-blur-[2px] data-[state=open]:animate-overlayShow" />
+          
+          {/* Content Box */}
+          <Dialog.Content className="fixed left-[50%] top-[50%] z-[1000] w-[90vw] md:w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[20px] bg-white dark:bg-[#1A1D20] p-6 shadow-2xl focus:outline-none font-['Poppins'] data-[state=open]:animate-contentShow">
+            
+            {/* Header */}
+            <div className="flex justify-between items-center mb-6">
+              <Dialog.Title className="text-xl font-semibold text-[#2d3339] dark:text-white">
+                Change Password
+              </Dialog.Title>
+              <Dialog.Close asChild>
+                <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                  <X size={24} />
+                </button>
+              </Dialog.Close>
+            </div>
+
+            <Dialog.Description className="text-sm text-gray-500 mb-4 hidden">
               Enter your old password and set a new one.
             </Dialog.Description>
 
-            <form className="mt-2 lg:mt-4 space-y-3">
+            <form className="flex flex-col gap-4">
               <div>
-                <label className="text-[12px] font-normal md:text-sm md:font-normal lg:font-medium dark:text-[#D7D7D7]">Old Password</label>
                 <input
                   type="password"
-                  className="w-full max-sm:py-[0.4vh] md:p-1 lg:p-2 border rounded-md md:mt-2 lg:mt-1"
+                  placeholder="Old Password"
+                  className="w-full p-3 border border-gray-300 rounded-[10px] focus:outline-none focus:border-blue-500 dark:bg-[#2D3339] dark:border-gray-600 dark:text-white text-sm"
                   value={oldPassword}
                   onChange={(e) => setOldPassword(e.target.value)}
                 />
               </div>
+              
               <div>
-                <label className="text-[12px] font-normal md:text-sm md:font-normal lg:font-medium dark:text-[#D7D7D7]">New Password</label>
                 <input
                   type="password"
-                  className="w-full max-sm:py-[0.4vh] md:p-1 lg:p-2 border rounded-md md:mt-2 lg:mt-1"
+                  placeholder="New Password"
+                  className="w-full p-3 border border-gray-300 rounded-[10px] focus:outline-none focus:border-blue-500 dark:bg-[#2D3339] dark:border-gray-600 dark:text-white text-sm"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                 />
               </div>
+
               <div>
-                <label className="text-[12px] font-normal md:text-sm md:font-normal lg:font-medium dark:text-[#D7D7D7]">Confirm Password</label>
                 <input
                   type="password"
-                  className="w-full max-sm:py-[0.4vh] md:p-1 lg:p-2 border rounded-md md:mt-2 lg:mt-1"
+                  placeholder="Confirm Password"
+                  className="w-full p-3 border border-gray-300 rounded-[10px] focus:outline-none focus:border-blue-500 dark:bg-[#2D3339] dark:border-gray-600 dark:text-white text-sm"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
-              <div>
 
-                <AnimatePresence>
-                  {message && (
-                    <motion.div
-                      initial={{ x: -40, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      exit={{ x: -100, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
-                      className="bg-red-100 text-red-800 text-sm font-medium px-4 py-1 rounded-md border border-red-400 mb-[1vh] mt-[1.5vh] inline-block"
-                    >
-                      ⚠️ {message}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-              <div className="flex justify-end gap-4 lg:gap-4 mt-4">
+              {/* Error/Success Message */}
+              <AnimatePresence>
+                {message && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className={`text-sm font-medium px-4 py-2 rounded-md border mb-2 ${
+                        message.includes("success") 
+                        ? "bg-green-100 text-green-800 border-green-400" 
+                        : "bg-red-100 text-red-800 border-red-400"
+                    }`}
+                  >
+                    {message.includes("success") ? "✅" : "⚠️"} {message}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Buttons */}
+              <div className="flex gap-4 mt-4">
                 <Dialog.Close asChild>
-                  <button className=" bg-gray-500 text-white px-[2.8vw] lg:px-[1.5vw] text-[14px]  rounded-md py-[0.6vh] lg:text-[16px] font-normal lg:font-medium ">
+                  <button className="flex-1 py-3 bg-gray-200 text-gray-700 rounded-[10px] font-medium hover:bg-gray-300 transition-colors dark:bg-gray-700 dark:text-gray-200">
                     Cancel
                   </button>
                 </Dialog.Close>
                 <button
                   type="button"
-                  className="lg:px-5 lg:py-1  px-[4vw]  text-[14px] lg:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600"
                   onClick={handleChangePassword}
+                  className="flex-1 py-3 bg-[#4d4ef2] text-white rounded-[10px] font-medium hover:bg-[#3b3be0] transition-colors shadow-lg shadow-blue-500/30"
                 >
                   Save
                 </button>
@@ -170,6 +193,7 @@ export default function SecuritySettings() {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
+      {/* --- RADIX DIALOG END --- */}
     </div>
   );
 }
