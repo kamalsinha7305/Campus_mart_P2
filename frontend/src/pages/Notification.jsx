@@ -32,7 +32,7 @@ export default function Notification() {
   return (
     <>
       <div className='h-screen w-screen dark:bg-[#131313]  '>
-        <Header  bagUrl={whitebag} />
+        <Header bagUrl={whitebag} />
         <div className="md:flex lg:flex">
 
           <div className="hidden md:block md:w-[35%] lg:w-[28%] pt-[3.5vh] px-[2vw] pb-[2vh]  bg-[#FBFBFB]  dark:bg-[#131313]">
@@ -45,9 +45,9 @@ export default function Notification() {
               <div className="mt-[5vh] mb-[2vh] max-sm:ml-[4vw]  ">
 
                 <div className="flex flex-col items-start">
-                <div class="text-[#292929] dark:text-[#F1F1F1]  text-[18px] lg:text-[24px] font-medium font-['Poppins'] flex items-center ">  
-                  {/*  <Bell className="mr-[0.2vw]" color="#364EF2" size={22} /> */}
-                  {/*  <svg
+                  <div class="text-[#292929] dark:text-[#F1F1F1]  text-[18px] lg:text-[24px] font-medium font-['Poppins'] flex items-center ">
+                    {/*  <Bell className="mr-[0.2vw]" color="#364EF2" size={22} /> */}
+                    {/*  <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#3B82F6"
                   viewBox="0 0 24 24"
@@ -55,11 +55,11 @@ export default function Notification() {
                 >
                   <path d="M12 2C10.34 2 9 3.34 9 5v1.07C6.16 7.56 4 10.03 4 13v5l-2 2v1h20v-1l-2-2v-5c0-2.97-2.16-5.44-5-6.93V5c0-1.66-1.34-3-3-3zM12 23c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2z" />
                 </svg> */}
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="#364EF2" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="size-6 mr-[1vw] md:mr-[0.25vw]">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
-                  </svg> 
-                  Notifications</div>
-                <div class="ml-[1vw]  md:ml-[0.3vw] justify-start text-gray-500 text-sm  md:text-base  font-normal font-['Roboto']">Stay updated with your latest activities and messages.</div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#364EF2" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="size-6 mr-[1vw] md:mr-[0.25vw]">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+                    </svg>
+                    Notifications</div>
+                  <div class="ml-[1vw]  md:ml-[0.3vw] justify-start text-gray-500 text-sm  md:text-base  font-normal font-['Roboto']">Stay updated with your latest activities and messages.</div>
                 </div>
 
               </div>
@@ -148,7 +148,7 @@ export default function Notification() {
 
             </div>
 
-            
+
           </div>
         </div>
       </div>

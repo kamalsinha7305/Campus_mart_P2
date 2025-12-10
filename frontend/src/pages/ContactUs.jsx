@@ -42,7 +42,6 @@ function ContactUs() {
 
   return (
     <>
-     
       <div className="w-screen h-screen overflow-hidden dark:bg-[#131313]">
         <Header bagUrl={whitebag} />
 

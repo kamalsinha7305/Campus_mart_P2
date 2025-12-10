@@ -61,11 +61,10 @@ function Profile() {
                     setUserDetails(data);
                     setPhone(data.phone || "");
 
-                    // LOAD ADDRESSES
                     if (data.savedAddresses && Array.isArray(data.savedAddresses)) {
                         setAddresses(data.savedAddresses);
                     } else if (data.addressDetails) {
-                        // Migrate legacy single address to array
+
                         setAddresses([data.addressDetails]);
                     }
                 }
@@ -75,12 +74,12 @@ function Profile() {
     }, []);
 
     const handleAddClick = () => {
-        setEditingIndex(null); // Null means we are adding a NEW address
+        setEditingIndex(null);
         setIsModalOpen(true);
     };
 
     const handleEditClick = (index) => {
-        setEditingIndex(index); // Set the specific index we want to edit
+        setEditingIndex(index);
         setIsModalOpen(true);
     };
 
@@ -91,20 +90,19 @@ function Profile() {
                 let updatedAddresses = [...addresses];
 
                 if (editingIndex !== null) {
-                    // Update existing address
+
                     updatedAddresses[editingIndex] = newAddressData;
                 } else {
-                    // Add new address
+
                     updatedAddresses.push(newAddressData);
                 }
 
                 setAddresses(updatedAddresses);
 
-                // Save array to Firestore
                 const docRef = doc(db, "Users", user.uid);
                 await updateDoc(docRef, {
                     savedAddresses: updatedAddresses,
-                    // Update legacy field for backward compatibility if needed
+
                     addressDetails: updatedAddresses[0] || {}
                 });
 
@@ -117,28 +115,24 @@ function Profile() {
         }
     };
 
-    // Calculate if incomplete for the warning message
     const isAddressIncomplete = !formData.line1 || !formData.city || !formData.pincode;
 
-    // --- DELETE ADDRESS FUNCTION ---
     const handleDeleteAddress = async (indexToDelete) => {
-        // 1. Confirm before deleting
+
         if (!window.confirm("Are you sure you want to delete this address?")) return;
 
         try {
             const user = auth.currentUser;
             if (user) {
-                // 2. Filter out the address at the specific index
+
                 const updatedAddresses = addresses.filter((_, index) => index !== indexToDelete);
 
-                // 3. Update Local State
                 setAddresses(updatedAddresses);
 
-                // 4. Update Firebase
                 const docRef = doc(db, "Users", user.uid);
                 await updateDoc(docRef, {
                     savedAddresses: updatedAddresses,
-                    // Ensure the main address field is updated to the new first address (or empty)
+
                     addressDetails: updatedAddresses[0] || {}
                 });
 
@@ -171,7 +165,7 @@ function Profile() {
                     "recaptcha-container",
                     {
                         size: "invisible",
-                        callback: () => { }, // reCAPTCHA solved callback
+                        callback: () => { },
                     },
                     auth
                 );
@@ -214,18 +208,14 @@ function Profile() {
             <div>
                 {userDetails ? (
                     <>
-                        {/* Prevent whole page from scrolling */}
                         <div className='w-screen h-screen overflow-hidden dark:bg-[#131313]'>
                             <Header bagUrl={whitebag} />
 
-                            {/* Layout: left sidebar fixed, right content scroll only */}
-                            {/* Change 70px if your header height is different */}
                             <div className='flex h-[calc(100vh-70px)]'>
                                 <div className="hidden md:block md:w-[37%] lg:w-[28%] pt-[3.5vh] pl-[2vw] pr-[1.75vw] pb-[2vh] bg-[#FBFBFB]  dark:bg-[#131313] ">
                                     <Profile_left_part />
                                 </div>
 
-                                {/* RIGHT SCROLLABLE AREA */}
                                 <div className='h-full md:w-[63%] lg:w-[72%] overflow-y-auto no-scrollbar bg-[#FBFBFB] dark:bg-[#131313] ' >
 
                                     <div className="bg-white dark:bg-[#1A1D20] rounded-[14px] lg:rounded-[20px] shadow-[0px_4px_10px_0px_rgba(54,54,54,0.10)] mx-[4.5vw] md:mr-[2.5vw] md:ml-[1.5vw] lg:mx-[4.5vw] overflow-hidden mt-[3vh] md:mt-[5vh]">
@@ -445,9 +435,9 @@ function Profile() {
                                         </div>
                                     </div>
 
-                                </div> {/* end right scrollable */}
-                            </div> {/* end main flex */}
-                        </div> {/* end outer container */}
+                                </div>
+                            </div>
+                        </div>
                     </>
                 ) : (
 

@@ -5,15 +5,13 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [darkMode, setDarkMode] = useState(() => {
-    // Load theme from localStorage if present
+    
     return localStorage.getItem("theme") === "dark";
   });
-
   const toggleDarkMode = () => {
     setDarkMode(prev => !prev);
   };
-
-  // Update localStorage and document class when darkMode changes
+ 
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -31,5 +29,4 @@ export const ThemeProvider = ({ children }) => {
   );
 };
 
-// Custom hook for easier access
 export const useTheme = () => useContext(ThemeContext);
